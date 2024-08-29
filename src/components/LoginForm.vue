@@ -13,13 +13,16 @@
   export default {
     methods: {
       loginWithGoogle() {
-        // Implement Google login logic
+        console.log("Google login clicked");
+        this.$router.push({ name: "Home" });
       },
       loginWithTwitter() {
-        // Implement Twitter login logic
+        console.log("Twitter login clicked");
+        this.$router.push({ name: "Home" });
       },
       loginWithInstagram() {
-        // Implement Instagram login logic
+        console.log("Instagram login clicked");
+        this.$router.push({ name: "Home" });
       },
     },
   };

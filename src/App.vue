@@ -2,20 +2,20 @@
 
 <template>
   <div id="app">
-    <!-- You can add global elements here like headers, footers, etc. -->
+    <!-- Header with conditional navigation -->
     <header>
       <h1>Football Stats App</h1>
-      <!-- Add navigation links if needed -->
-      <nav>
-        <router-link to="/">Home</router-link>
-        <router-link to="/login">Login</router-link>
+      <!-- Conditionally render navigation links based on the current route -->
+      <nav v-if="!isLoginPage">
+        <router-link to="/home">Home</router-link>
+        <router-link to="/leagues">Leagues</router-link>
       </nav>
     </header>
 
     <!-- Router view renders the current route's component -->
     <router-view />
 
-    <footer>
+    <footer v-if="!isLoginPage">
       <!-- You can add footer content here -->
       <p>&copy; 2024 Football Stats App</p>
     </footer>
@@ -25,6 +25,12 @@
 <script>
   export default {
     name: "App",
+    computed: {
+      // Check if the current route is the login page
+      isLoginPage() {
+        return this.$route.name === "Login";
+      },
+    },
   };
 </script>
 
