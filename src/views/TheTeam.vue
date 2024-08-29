@@ -29,7 +29,7 @@
     components: { ChartComponent, LoadingSpinner },
     data() {
       return {
-        team: {},
+        team: null,
         loading: true,
       };
     },
@@ -40,11 +40,11 @@
           datasets: [
             {
               data: [
-                this.team.awayWins,
-                this.team.awayLosses,
-                this.team.possession,
-                this.team.totalShots,
-                this.team.goalsConceded,
+                this.team.awayWins || 0,
+                this.team.awayLosses || 0,
+                this.team.possession || 0,
+                this.team.totalShots || 0,
+                this.team.goalsConceded || 0,
               ],
               backgroundColor: [
                 "#FF6384",
@@ -59,15 +59,17 @@
       },
     },
     async created() {
-      const teamId = this.$route.params.id;
       try {
+        // Correct the URL structure by removing any extra slashes
         const response = await axios.get(
-          `${import.meta.env.VITE_SPORTMONKS_API_URL}/teams/${teamId}`,
+          `/api/v3/football/teams/${this.$route.params.id}`,
           {
-            params: { api_key: import.meta.env.VITE_SPORTMONKS_API_KEY },
+            params: {
+              api_token: import.meta.env.VITE_SPORTMONKS_API_KEY,
+            },
           }
         );
-        this.team = response.data.data;
+        this.team = response.data.data; // Adjust this based on actual response structure
       } catch (error) {
         console.error("Error fetching team data:", error);
       } finally {

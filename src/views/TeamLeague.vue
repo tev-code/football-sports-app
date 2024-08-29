@@ -29,18 +29,13 @@
       };
     },
     async created() {
-      console.log("API URL:", import.meta.env.VITE_SPORTMONKS_API_URL);
-      console.log("API Key:", import.meta.env.VITE_SPORTMONKS_API_KEY);
-
       try {
-        const response = await axios.get(
-          import.meta.env.VITE_SPORTMONKS_API_URL,
-          {
-            params: {
-              api_token: import.meta.env.VITE_SPORTMONKS_API_KEY,
-            },
-          }
-        );
+        // Use the proxy by starting the path with '/api'
+        const response = await axios.get("/api/v3/football/fixtures", {
+          params: {
+            api_token: import.meta.env.VITE_SPORTMONKS_API_KEY,
+          },
+        });
         this.leagues = response.data.data; // Adjust this based on actual response structure
       } catch (error) {
         console.error("Error fetching leagues:", error);
