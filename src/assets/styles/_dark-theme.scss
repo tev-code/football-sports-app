@@ -1,0 +1,10 @@
+/** @format */
+
+.dark-theme {
+  background-color: $background-color-dark;
+  color: $text-color-dark;
+
+  a {
+    color: $primary-color-dark;
+  }
+}

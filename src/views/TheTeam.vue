@@ -50,8 +50,8 @@
         <p>Wins: {{ stats.wins }}%</p>
         <p>Losses: {{ stats.losses }}%</p>
         <p>Possession: {{ stats.draws }}%</p>
-        <p>Total Shots: {{ stats.goalsConceded }}</p>
-        <p>Goals Conceded: {{ stats.totalShots }}</p>
+        <p>Total Shots: {{ stats.totalShots }}</p>
+        <p>Goals Conceded: {{ stats.goalsConceded }}</p>
       </div>
 
       <ChartComponent :chartData="chartData" />
@@ -68,8 +68,8 @@
     components: { ChartComponent, LoadingSpinner },
     data() {
       return {
-        teamName: "Sample Team", // Replace with the actual team name
-        teamLogo: "path/to/team/logo.png", // Replace with the actual team logo URL
+        teamName: "", // Will be dynamically set based on API data
+        teamLogo: "", // Will be dynamically set based on API data
         stats: {
           wins: 0,
           losses: 0,
@@ -103,9 +103,8 @@
 
           const response = await axios.get(`${baseUrl}/fixtures`, {
             params: {
-              include: "league;participants",
+              include: "league;participants.team",
               api_token: apiToken,
-              // Additional params if needed
             },
           });
 
@@ -113,10 +112,10 @@
           this.processFixtures();
         } catch (error) {
           console.error("Error fetching fixtures:", error);
+          this.loading = false;
         }
       },
       processFixtures() {
-        // Calculate stats based on fixtures data
         let wins = 0;
         let losses = 0;
         let draws = 0;
@@ -132,10 +131,18 @@
             draws++;
           }
 
-          // Add calculations for goalsConceded and totalShots if available
-          // Example:
-          // goalsConceded += fixture.goals_conceded;
-          // totalShots += fixture.total_shots;
+          // Extract and set the team logo and name
+          if (fixture.participants && fixture.participants.length > 0) {
+            const team = fixture.participants.find(
+              (p) => p.meta.location === "home"
+            ); // Adjust this to get the correct team
+            if (team) {
+              this.teamName = team.name;
+              this.teamLogo = team.image_path;
+            }
+          }
+
+          // Add additional calculations for goalsConceded and totalShots if available
         });
 
         this.stats = {
